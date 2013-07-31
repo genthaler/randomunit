@@ -8,9 +8,9 @@ Email: andreou csd dot uoc dot gr
 
 Homepage: <http://www.csd.uoc.gr/~andreou>
 
-## 1 Tutorial Introduction
+## 1. Tutorial Introduction
 
-### 1.1 Unit-Testing In General
+### 1.1. Unit-Testing In General
 
 Unit testing is a proved and ubiquitous practice throughout the software industry. In the community of Java developers, JUnit is a very popular testing framework, with wide support from tools and IDEs. As of itself, it is very basic - just providing the necessary machinery to easily set up tests, making assertions, and running suites. Fortunately, it can be extended to fill more specialized needs (for instance, see JMock framework).
 
@@ -20,7 +20,7 @@ This typically means writing more tests, so to make less room for obvious bugs, 
 
 Randomized tests can be of help in this procedure. Given that single test methods typically run very fast, one would be willing to run thousands (and more) of such test methods, if that would help her find more bugs and gain more confidence on the software under testing. Creating thousands of test by hand is rather ...impractical though, to put it so. What is really missing is a tool to automatically create tests and run them. This framework, RandomUnit, attempts to successfully meet these ends.
 
-### 1.2 RandomUnit
+### 1.2. RandomUnit
 
 RandomUnit's approach is to rely on the concepts of "Design by Contract" (DbC), ie preconditions, postconditions, and invariants. RandomUnit assumes that a programmer is able to translate the specified pre/post-conditions and invariants of a class, in java code (as assertions). The translation must be exact, or else false alarms can occur (when for example, a postcondition is coded as more strict than its specification), or bugs be hidden (by analogous mismatches).
 
@@ -32,7 +32,7 @@ So, for a high-level view, a randomized test has a bunch of methods with associa
 
 RandomUnit requires JUnit version 3.8.1 or above, and JDK 1.5 (tiger) or above.
 
-## 2 Creating and Running a Randomized Test
+## 2. Creating and Running a Randomized Test
 
 (Note: this section assumes you are able to run JUnit tests. If you can't, you should check JUnit documentation, or use some tool or IDE that automates the task).
 
@@ -277,7 +277,7 @@ What would happen if we take a handle on an arbitrary object, neither taken from
 
 In the example, we first create a reference to another Stack instance (somehow, it doesn't matter), and then we call the checkInvariants inherited method, providing as arguments the object and the pool name with the desired associated invariants checks. This results in the invocation of every @Invariant("stacks") method that we have defined against the provided object.
 
-## Special Topics
+## 3. Special Topics
 
 ### 3.1 Logging
 
@@ -289,7 +289,7 @@ b) DetailedLogStrategy maintains a similar bounded buffer for every pooled objec
 
 By default, method invocation logs are printed in the form: "methodName(arg1, arg2...)-->returnValue", for example: "checkStackInvariant(Stack@1ff7a1e)-->null" (methods that return void are printed like they returned null), or "randomNextInt()-->235".
 
-### 3.2 Phases
+### 3.2. Phases
 
 You may have noted that the methods are selected randomly according to their declared probability - but not discrimination is made for creator methods and only-testing methods. What if you wanted to have a starting phase in the test, at which you would only create collaborators, and then concentrate the test only in testing these objects? This can be also expressed in the framework by using phases. All probabilities that have been shown to this point are defined for the phase 0, the default phase. @Prob actually declares an array of doubles - all this time we were just declaring an array with only a single element. We can reform our test to firstly create stacks and ints, in a 70%-30% ratio, and only then test the objects like this: import randomunit.Invariant; import randomunit.Creates; import randomunit.Prob; import randomunit.Params; import randomunit.RandomizedTestCase; import randomunit.SimpleLogStrategy;
 
@@ -350,7 +350,7 @@ So, we can say for example, that when executedSteps == 30, switch phase to 1. We
 
 The method setPhase(int) is naturally defined in RandomizedTestCase.
 
-### 3.3 Further Customization
+### 3.3. Further Customization
 
 Some more useful methods are defined, which can be overrided to further customize a test.
 
@@ -388,7 +388,7 @@ You can have full control over the object pools too. These methods are provided:
 
 So, you could even load the pools with predefined objects. Yet, a compromise is being made: you can't create arbitrary pools; pools are only created when a method tagged with @Creates is found. Were the creation of pools allowed arbitrarily, a typo error in the declaration of @Params could be only found during runtime - in this version, these types of errors are reported at the construction of the test. A work-around is to declare a creator method with @Prob(0), and preload the pools with objects in the setUp() method of JUnit.
 
-## Best Practices
+## 4. Best Practices
 
 RandomUnit is not intended as a replacement for writing deterministic tests. Simple corner cases should be always be tested in the usual manner (you can place testXXX methods in the subclass of RandomizedTestCase and they will be picked up by JUnit as expected). Randomized test are useful when the objects to be tested has complex behaviour that depends on input parameters and on object's internal state. It is difficult to manually create objects in a sufficient number of states to perform the same test for all of them; RandomUnit comes handy in such cases.
 
@@ -396,7 +396,7 @@ You should carefully think about what probabilities to use. You should not creat
 
 A note on naming: methods are inspected with reflection both by JUnit and by RandomUnit. So, a method with a @Prob annotation which begins with the prefix "test" and takes no parameters will be considered twice. This should be rarely intended, and should be avoided. The prefix "random" could be used as a prefix for random test methods, although not needed (such methods are identified by the @Prob annotation).
 
-## Contribution
+## 5. Contribution
 
 Feedback is mostly welcomed, as well as contributions in the form of more tutorials, more examples, ideas to make this project more useful, etc...
 
