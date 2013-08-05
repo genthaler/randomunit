@@ -3,9 +3,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>randomunit</groupId>
 	<artifactId>randomunit</artifactId>
-	<version>0.1-SNAPSHOT</version>
+	<version>1.0-SNAPSHOT</version>
 	<name>RandomUnit</name>
-	<description>Random generation of test data for unit testing</description>
+	<description>A randomized unit testing tool</description>
 	<licenses>
 		<license>
 			<name>GNU Lesser General Public License v2.1 or later</name>
@@ -13,6 +13,71 @@
 			<comments>Using the maven-assembly-plugin to attach a full source archive, including the LICENCE</comments>
 		</license>
 	</licenses>
+	<developers>
+		<developer>
+			<id>andreou</id>
+			<name>Andreou Dimitris</name>
+			<email>andreou at csd dot uoc dot gr</email>
+			<roles>
+				<role>Java Developer</role>
+			</roles>
+			<timezone>-2</timezone>
+		</developer>
+		<developer>
+			<id>genthaler</id>
+			<name>Günther Enthaler</name>
+			<email>genthaler@github.com</email>
+			<roles>
+				<role>Java Developer</role>
+			</roles>
+			<timezone>-10</timezone>
+		</developer>
+	</developers>
+	<scm>
+		<connection>scm:git:https://github.com/genthaler/${project.artifactId}.git</connection>
+		<developerConnection>scm:git:https://github.com/genthaler/${project.artifactId}.git</developerConnection>
+		<tag>HEAD</tag>
+		<url>https://github.com/genthaler/${project.artifactId}</url>
+	</scm>
+	<issueManagement>
+		<system>GitHub</system>
+		<url>https://github.com/genthaler/${project.artifactId}/issues</url>
+	</issueManagement>
+	<ciManagement>
+		<system>Travis CI</system>
+		<url>https://travis-ci.org/genthaler/${project.artifactId}</url>
+		<notifiers>
+			<notifier>
+				<type>mail</type>
+				<sendOnError>true</sendOnError>
+				<sendOnFailure>true</sendOnFailure>
+				<sendOnSuccess>true</sendOnSuccess>
+				<sendOnWarning>true</sendOnWarning>
+			</notifier>
+		</notifiers>
+	</ciManagement>
+	<distributionManagement>
+		<repository>
+			<id>github</id>
+			<name>GitHub ${project.artifactId} Repository</name>
+			<url>https://raw.github.com/genthaler/${project.artifactId}/mvn-repo</url>
+		</repository>
+		<snapshotRepository>
+			<id>github</id>
+			<name>GitHub ${project.artifactId} Repository</name>
+			<url>https://raw.github.com/genthaler/${project.artifactId}/mvn-repo</url>
+		</snapshotRepository>
+		<site>
+			<id>github</id>
+			<name>GitHub</name>
+			<url>http://genthaler.github.com/${project.artifactId}/</url>
+		</site>
+		<downloadUrl>https://raw.github.com/genthaler/${project.artifactId}/mvn-repo/com/github/genthaler/${project.artifactId}/${project.version}/${project.artifactId}-${project.version}.jar</downloadUrl>
+	</distributionManagement>
+	<properties>
+		<github.global.server>github</github.global.server>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -88,6 +153,24 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.google.code.sortpom</groupId>
+				<artifactId>maven-sortpom-plugin</artifactId>
+				<version>2.1.0</version>
+				<executions>
+					<execution>
+						<id>sort</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>sort</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<nrOfIndentSpace>-1</nrOfIndentSpace>
+					<sortProperties>true</sortProperties>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
