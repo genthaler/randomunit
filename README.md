@@ -402,4 +402,4 @@ Feedback is mostly welcomed, as well as contributions in the form of more tutori
 
 ## 6. Project Page
 
-Please see also the [project page](http://genthaler.github.io/RandomUnit/)
+Please see also the [project page](http://genthaler.github.io/randomunit/)
