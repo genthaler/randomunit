@@ -400,3 +400,6 @@ A note on naming: methods are inspected with reflection both by JUnit and by Ran
 
 Feedback is mostly welcomed, as well as contributions in the form of more tutorials, more examples, ideas to make this project more useful, etc...
 
+## 6. Project Page
+
+Please see also the [project page](http://genthaler.github.io/RandomUnit/)
