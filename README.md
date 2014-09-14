@@ -259,9 +259,14 @@ Another aspect we would like to check is invariants. We could simply create a me
         }
     } 
 
-This enforces the invariants of the stack, namely: - It can be either empty, or its size must be greater than zero (exclusive or) - It can be either full, or its size must be less than its capacity (exclusive or) - If it is not empty, we can peek without getting an exception
+This enforces the invariants of the stack, namely: 
+* It can be either empty, or its size must be greater than zero (exclusive or)
+* It can be either full, or its size must be less than its capacity (exclusive or)
+* If it is not empty, we can peek without getting an exception
 
-@Invariant annotation accepts a single object pool name, and the annotated method must take exactly one corresponding parameter. We can define as many @Invariant methods as we like, even for the same object pool. All invariant checking methods that apply to an object pool are checked against: - Every object that is added to its pool - Every object that has just been used as an injected parameter in a random test method (after the method's completion).
+@Invariant annotation accepts a single object pool name, and the annotated method must take exactly one corresponding parameter. We can define as many @Invariant methods as we like, even for the same object pool. All invariant checking methods that apply to an object pool are checked against:
+* Every object that is added to its pool,
+* Every object that has just been used as an injected parameter in a random test method (after the method's completion).
 
 These rules are sufficient to assure that every object has tested invariants before uses of it. Of course, this would not be the case if the objects that collaborate in test are not taken as injected parameters. As expected, a failed invariant indicates a bug, and an explaining exception is thrown.
 
