@@ -16,6 +16,9 @@ import java.util.Set;
 
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
+
+import org.junit.internal.AssumptionViolatedException;
+
 import randomunit.MethodInvocationLog.PooledObject;
 
 /**
@@ -426,7 +429,7 @@ public abstract class RandomizedTestCase extends TestCase {
 					for (String poolName : creator.value()) {
 						pools.get(poolName).add(filterNewObject(poolName, o));
 					}
-				} catch (PreconditionFailedException e) {
+				} catch (AssumptionViolatedException e) {
 					return false;
 				}
 			}
@@ -456,7 +459,7 @@ public abstract class RandomizedTestCase extends TestCase {
 						// public
 		} catch (InvocationTargetException e) {
 			Throwable cause = e.getCause();
-			if (cause instanceof PreconditionFailedException) {
+			if (cause instanceof AssumptionViolatedException) {
 				// ignore failed preconditions
 				return false;
 			}
@@ -465,19 +468,13 @@ public abstract class RandomizedTestCase extends TestCase {
 							: new String[0]), null, new String[0]);
 			try {
 				throw e.getCause();
-			} catch (PostconditionFailedException post) {
+			} catch (AssertionError post) {
 				// this is a bug
 				throw new TestFailedException(
-						"Failed postcondition while invoking method: '" + m
-								+ "' " + "with args: " + Arrays.asList(args),
-						methodLog, post, logStrategy);
-			} catch (InvariantFailedException invEx) {
-				// user called invariant() or threw manually an
-				// InvariantFailedException
-				throw new TestFailedException(
-						"Failed invariant while invoking method: '" + m + "' "
-								+ "with args: " + Arrays.asList(args),
-						methodLog, invEx, logStrategy);
+						"Failed postcondition or invariant while invoking method: '"
+								+ m + "' " + "with args: "
+								+ Arrays.asList(args), methodLog, post,
+						logStrategy);
 			} catch (TestFailedException invEx) {
 				// user called checkInvariants
 				throw invEx;
@@ -532,7 +529,7 @@ public abstract class RandomizedTestCase extends TestCase {
 								poolName) }, null, new String[0]);
 				try {
 					throw e.getCause();
-				} catch (InvariantFailedException ex) {
+				} catch (AssertionError ex) {
 					throw new TestFailedException(
 							"Failed invariant while invoking method: '"
 									+ invMethod + "' " + "with argument: " + o,
@@ -546,95 +543,6 @@ public abstract class RandomizedTestCase extends TestCase {
 			} catch (IllegalAccessException e) {
 				throw new Error(e); // will never happen
 			}
-		}
-	}
-
-	/**
-	 * Tests a precondition. If the condition is false, a
-	 * PreconditionFailedException is thrown.
-	 * 
-	 * @param condition
-	 *            the precondition to test
-	 */
-	public void precondition(boolean condition)
-			throws PreconditionFailedException {
-		if (!condition) {
-			throw new PreconditionFailedException();
-		}
-	}
-
-	/**
-	 * Tests a precondition. If the condition is false, a
-	 * PreconditionFailedException is thrown.
-	 * 
-	 * @param condition
-	 *            the precondition to test
-	 * @param message
-	 *            a message that describes the precondition tested
-	 */
-	public void precondition(boolean condition, String message)
-			throws PreconditionFailedException {
-		if (!condition) {
-			throw new PreconditionFailedException(message);
-		}
-	}
-
-	/**
-	 * Tests a postcondition. If the condition is false, a
-	 * PostconditionFailedException is thrown.
-	 * 
-	 * @param condition
-	 *            the postcondition to test
-	 */
-	public void postcondition(boolean condition)
-			throws PostconditionFailedException {
-		if (!condition) {
-			throw new PostconditionFailedException();
-		}
-	}
-
-	/**
-	 * Tests a postcondition. If the condition is false, a
-	 * PostconditionFailedException is thrown.
-	 * 
-	 * @param condition
-	 *            the postcondition to test
-	 * @param message
-	 *            a message that describes the postcondition tested
-	 */
-	public void postcondition(boolean condition, String message)
-			throws PostconditionFailedException {
-		if (!condition) {
-			throw new PostconditionFailedException(message);
-		}
-	}
-
-	/**
-	 * Tests an invariant. If the invariant does not hold, an
-	 * InvariantFailedException is thrown.
-	 * 
-	 * @param condition
-	 *            the invariant to test
-	 */
-	public void invariant(boolean condition) throws InvariantFailedException {
-		if (!condition) {
-			throw new InvariantFailedException();
-		}
-	}
-
-	/**
-	 * Tests an invariant. If the invariant does not hold, an
-	 * InvariantFailedException is thrown.
-	 * 
-	 * @param condition
-	 *            the invariant to test
-	 * @param message
-	 *            a message that describes the invariant tested
-	 */
-	public void invariant(boolean condition, String message)
-			throws InvariantFailedException {
-		if (!condition) {
-			throw new InvariantFailedException(message);
 		}
 	}
 
@@ -671,7 +579,7 @@ public abstract class RandomizedTestCase extends TestCase {
 	 * returned from this method is finally added to the specified pool.
 	 */
 	protected Object filterNewObject(String pool, Object object)
-			throws PreconditionFailedException {
+			throws AssumptionViolatedException {
 		return object;
 	}
 
